@@ -1,20 +1,45 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# TechDriver — Site Institucional
 
-# Run and deploy your AI Studio app
+Site institucional da **TechDriver**, plataforma de mobilidade urbana com modelo de franquia e opção white label.
 
-This contains everything you need to run your app locally.
+## Tecnologias
 
-View your app in AI Studio: https://ai.studio/apps/drive/1LOxbC0gl-O71t1Ia0YeyvkTbpPBH3cBv
+- React 19 + TypeScript
+- Vite 6
+- Tailwind CSS
+- Framer Motion
+- React Router
+- Lucide Icons
 
-## Run Locally
+## Estrutura
 
-**Prerequisites:**  Node.js
+```
+├── components/     # Componentes reutilizáveis
+├── pages/          # Páginas (Home, Motorista, Contato...)
+├── public/assets/  # Imagens e arquivos estáticos
+├── App.tsx         # Rotas da aplicação
+├── index.tsx       # Ponto de entrada
+└── types.ts        # Tipagens compartilhadas
+```
 
+## Rodando localmente
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+**Pré-requisito:** Node.js 18+
+
+```bash
+npm install
+npm run dev
+```
+
+O site abre em http://localhost:5174
+
+## Build de produção
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+© Fabio Technology Group — TechDriver
