@@ -1,34 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Button from './Button';
 import { SlideData } from '../types';
-import { ChevronRight, PlayCircle } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const slides: SlideData[] = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop', // Driving/City
+    image: '/assets/carrossel/slide-1.jpg', // Trânsito urbano à noite
     title: 'A Nova Era da Mobilidade Urbana',
     subtitle: 'Tecnologia de ponta e gestão inteligente para transformar o transporte na sua cidade.'
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=2069&auto=format&fit=crop', // Corporate/Tech meeting
+    image: '/assets/carrossel/slide-2.jpg', // Usuário no app pelo celular
     title: 'Sistema White-Label Completo',
     subtitle: 'Sua marca, nossa tecnologia. Apps Android, iOS e Painel Administrativo prontos para operar.'
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=1974&auto=format&fit=crop', // Driver/App usage
+    image: '/assets/carrossel/slide-3.jpg', // Motorista ao volante
     title: 'Seja Dono de uma Franquia',
     subtitle: 'Baixo investimento inicial e alta rentabilidade com suporte total da matriz TechDriver.'
+  },
+  {
+    id: 4,
+    image: '/assets/carrossel/slide-4.jpg', // Família junto ao carro
+    title: 'Mobilidade para Toda a Família',
+    subtitle: 'Viagens seguras e confortáveis para quem você ama, a poucos toques de distância.'
   }
 ];
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+
+  // Pré-carrega as imagens para a troca não esperar o download
+  useEffect(() => {
+    slides.forEach(({ image }) => { new Image().src = image; });
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -41,24 +51,20 @@ const Hero: React.FC = () => {
     <section id="hero" className="relative h-screen min-h-[700px] w-full overflow-hidden bg-tec-dark flex items-center justify-center">
       
       {/* Background Slides */}
-      <AnimatePresence mode="wait">
-        <motion.div
+      {/* Crossfade: a nova imagem surge por cima da anterior, que só sai depois */}
+      <AnimatePresence initial={false}>
+        <motion.img
           key={currentSlide}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute inset-0 z-0"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-tec-dark via-transparent to-black/30 z-10" />
-          <img 
-            src={slides[currentSlide].image} 
-            alt="Hero Background" 
-            className="w-full h-full object-cover opacity-60"
-          />
-        </motion.div>
+          src={slides[currentSlide].image}
+          alt="Hero Background"
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1, zIndex: 1, transition: { opacity: { duration: 1.2, ease: "easeInOut" }, scale: { duration: 6, ease: "easeOut" } } }}
+          exit={{ opacity: 1, zIndex: 0, transition: { duration: 1.2 } }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
       </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-tec-dark via-transparent to-transparent z-10" />
 
       {/* Content */}
       <div className="container mx-auto px-6 relative z-20 pt-20">
@@ -69,28 +75,41 @@ const Hero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="flex items-center gap-2 mb-4">
-              <span className="px-3 py-1 bg-tec-primary/20 text-tec-primary border border-tec-primary/30 rounded-full text-xs font-bold uppercase tracking-widest">
-                Líder em Tecnologia
-              </span>
-            </div>
-            <h1 className="text-5xl md:text-7xl font-display font-bold text-white leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-white leading-tight mb-6">
               {slides[currentSlide].title}
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 font-light mb-10 leading-relaxed max-w-2xl border-l-4 border-tec-primary pl-6">
               {slides[currentSlide].subtitle}
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="w-full sm:w-auto" onClick={() => navigate('/franquias')}>
-                Quero ser Franqueado <ChevronRight className="w-5 h-5" />
-              </Button>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto" onClick={() => navigate('/white-label')}>
-                <PlayCircle className="w-5 h-5" /> Testar White-Label
-              </Button>
-            </div>
           </motion.div>
         </div>
+
+        {/* Centralizado na seção e fora do bloco animado, para não piscar a cada troca de slide */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="flex justify-center mt-16 md:mt-32"
+        >
+          <button
+            onClick={() => navigate('/franquias')}
+            className="group relative inline-flex items-center justify-center"
+          >
+            {/* Halo pulsante */}
+            <span className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-tec-primary via-violet-500 to-emerald-400 opacity-60 blur-md group-hover:opacity-100 group-hover:blur-lg transition-all duration-500 animate-pulse" />
+            {/* Borda em gradiente */}
+            <span className="relative p-[2px] rounded-full bg-gradient-to-r from-tec-primary via-violet-500 to-emerald-400">
+              <span className="relative flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-tec-primary to-violet-600 px-6 py-2.5 text-white text-sm font-semibold tracking-wide group-hover:scale-[1.03] transition-transform duration-300">
+                {/* Reflexo que atravessa o botão */}
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12" />
+                <span className="relative">Quero ser Franqueado</span>
+                <span className="relative w-6 h-6 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white/25 transition-colors">
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </span>
+            </span>
+          </button>
+        </motion.div>
       </div>
 
       {/* Slider Indicators */}

@@ -3,7 +3,6 @@ import FranchiseHero from '../components/FranchiseHero';
 import FranchiseBenefits from '../components/FranchiseBenefits';
 import FranchisePackage from '../components/FranchisePackage';
 import FranchiseTimeline from '../components/FranchiseTimeline';
-import SocialProof from '../components/SocialProof';
 import FranchiseForm from '../components/FranchiseForm';
 import FranchiseCTA from '../components/FranchiseCTA';
 
@@ -14,7 +13,6 @@ const Franchise: React.FC = () => {
       <FranchiseBenefits />
       <FranchisePackage />
       <FranchiseTimeline />
-      <SocialProof />
       <FranchiseForm />
       <FranchiseCTA />
     </div>

@@ -50,9 +50,6 @@ const AllFeatures: React.FC = () => {
       {/* Hero */}
       <section className="bg-zinc-900 border-b border-zinc-800 py-20">
         <div className="container mx-auto px-6 text-center">
-          <div className="inline-block bg-tec-primary/10 border border-tec-primary/20 rounded-full px-4 py-1.5 mb-6">
-            <span className="text-tec-primary font-bold uppercase tracking-widest text-xs">Catálogo Completo</span>
-          </div>
           <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">
             Tudo o que você precisa <br/> para <span className="text-blue-500">dominar o mercado</span>.
           </h1>

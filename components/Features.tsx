@@ -3,6 +3,7 @@ import { Server, Lock, PhoneCall, BarChart3, Globe2, Rocket } from 'lucide-react
 import { Feature } from '../types';
 import Button from './Button';
 import { useNavigate } from 'react-router-dom';
+import SectionHeader from './SectionHeader';
 
 const features: Feature[] = [
   {
@@ -37,41 +38,80 @@ const features: Feature[] = [
   }
 ];
 
+// Uma cor de destaque por card, na mesma ordem de `features`
+const accents = [
+  { rgb: '30,167,225', gradient: 'from-tec-primary to-cyan-300', text: 'text-tec-primary' },
+  { rgb: '139,92,246', gradient: 'from-violet-500 to-fuchsia-400', text: 'text-violet-400' },
+  { rgb: '16,185,129', gradient: 'from-emerald-500 to-teal-300', text: 'text-emerald-400' },
+  { rgb: '245,158,11', gradient: 'from-amber-500 to-yellow-300', text: 'text-amber-400' },
+  { rgb: '59,130,246', gradient: 'from-blue-500 to-sky-300', text: 'text-blue-400' },
+  { rgb: '244,63,94', gradient: 'from-rose-500 to-orange-300', text: 'text-rose-400' },
+];
+
+// Posição do mouse no card, usada pelo brilho que segue o cursor
+const trackMouse = (e: React.MouseEvent<HTMLDivElement>) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty('--x', `${e.clientX - rect.left}px`);
+  e.currentTarget.style.setProperty('--y', `${e.clientY - rect.top}px`);
+};
+
 const Features: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <section id="features" className="py-24 bg-tec-dark">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="max-w-2xl">
-            <span className="text-tec-primary font-bold uppercase tracking-widest text-sm">Por que escolher a TechDriver</span>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mt-2">
-              Tecnologia construída para <br/> performance e escala.
-            </h2>
-          </div>
+        <SectionHeader
+          title="Tecnologia construída para"
+          highlight="performance e escala."
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          {features.map((feature, index) => {
+            const accent = accents[index % accents.length];
+            return (
+              <div
+                key={index}
+                onMouseMove={trackMouse}
+                style={{ '--accent': accent.rgb } as React.CSSProperties}
+                className="group relative p-px rounded-2xl bg-white/[0.06] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_50px_-15px_rgba(var(--accent),0.55)]"
+              >
+                {/* Borda que acende na cor do card, a partir da posição do mouse */}
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(400px_circle_at_var(--x,50%)_var(--y,50%),rgba(var(--accent),0.9),transparent_45%)]" />
+
+                <div className="relative h-full rounded-2xl bg-zinc-950/90 backdrop-blur-xl p-5 overflow-hidden">
+                  {/* Brilho interno que segue o cursor */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(350px_circle_at_var(--x,50%)_var(--y,50%),rgba(var(--accent),0.12),transparent_60%)]" />
+                  {/* Luz de canto, sempre visível */}
+                  <div className="absolute -top-20 -right-20 w-36 h-36 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 bg-[rgb(var(--accent))]" />
+
+                  <div className="relative flex items-start justify-between mb-4">
+                    <div className="relative">
+                      <div className={`absolute inset-0 rounded-lg bg-gradient-to-br ${accent.gradient} blur-lg opacity-40 group-hover:opacity-80 transition-opacity duration-500`} />
+                      <div className={`relative w-10 h-10 rounded-lg bg-gradient-to-br ${accent.gradient} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                        <feature.icon size={18} strokeWidth={2.2} />
+                      </div>
+                    </div>
+                    <span className="font-mono text-xs text-zinc-600 group-hover:text-zinc-400 transition-colors">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <h3 className="relative text-base font-semibold text-white mb-1.5 tracking-tight">{feature.title}</h3>
+                  <p className="relative text-gray-400 leading-relaxed text-[13px]">{feature.description}</p>
+
+                  {/* Linha de destaque que cresce no hover */}
+                  <div className={`relative mt-4 h-0.5 w-8 rounded-full bg-gradient-to-r ${accent.gradient} group-hover:w-full transition-all duration-700 ease-out`} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex justify-center mt-12">
           <Button variant="outline" size="sm" onClick={() => navigate('/funcionalidades')}>
             Ver todas as funcionalidades
           </Button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div 
-              key={index} 
-              className="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-tec-primary hover:shadow-[0_0_30px_rgba(30,167,225,0.6)] transition-all duration-300 group hover:bg-zinc-900 relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-10 transition-opacity duration-500">
-                 <feature.icon size={100} className="text-tec-primary transform rotate-12" />
-              </div>
-
-              <div className="w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-white mb-6 group-hover:bg-tec-primary group-hover:scale-110 transition-all duration-300 relative z-10">
-                <feature.icon size={24} />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3 relative z-10">{feature.title}</h3>
-              <p className="text-gray-400 leading-relaxed text-sm relative z-10">{feature.description}</p>
-            </div>
-          ))}
         </div>
       </div>
     </section>

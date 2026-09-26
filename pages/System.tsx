@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import Contact from '../components/Contact';
-import { Monitor, Smartphone, Shield, Zap, Globe, CreditCard, ChevronRight, BarChart3, Map } from 'lucide-react';
+import { Monitor, Smartphone, Shield, Globe, CreditCard, ChevronRight, BarChart3, Map } from 'lucide-react';
 
 const System: React.FC = () => {
   const navigate = useNavigate();
@@ -22,9 +22,6 @@ const System: React.FC = () => {
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             <div className="lg:w-1/2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-6">
-                <Zap size={14} /> Tecnologia Proprietária V4.0
-              </div>
               <h1 className="text-5xl md:text-6xl font-display font-bold text-white leading-tight mb-6">
                 O ecossistema completo para <span className="text-transparent bg-clip-text bg-gradient-to-r from-tec-primary to-blue-600">gestão de transporte</span>.
               </h1>

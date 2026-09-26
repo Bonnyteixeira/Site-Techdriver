@@ -1,24 +1,65 @@
 import React, { useState } from 'react';
 import Button from './Button';
-import { MessageSquare, Search, Loader2, CheckCircle } from 'lucide-react';
+import { ArrowRight, Search, Loader2, CheckCircle, ShieldCheck, Sparkles, LayoutDashboard, FileSpreadsheet, User, Home, Target, Smartphone } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import SectionHeader from './SectionHeader';
+import InterestCityField from './InterestCityField';
 
-const Contact: React.FC = () => {
+export type ContactBenefit = { icon: React.ElementType; text: string; gradient: string };
+
+const defaultBenefits: ContactBenefit[] = [
+  { icon: Sparkles, text: 'Consultoria gratuita e personalizada', gradient: 'from-tec-primary to-cyan-300' },
+  { icon: LayoutDashboard, text: 'Demonstração do painel administrativo', gradient: 'from-violet-500 to-fuchsia-400' },
+  { icon: FileSpreadsheet, text: 'Planilha de viabilidade econômica', gradient: 'from-emerald-500 to-teal-300' },
+];
+
+const initialForm = {
+  name: '',
+  email: '',
+  whatsapp: '',
+  cep: '',
+  address: '',
+  number: '',
+  neighborhood: '',
+  city: '',
+  state: '',
+  interest: 'Quero abrir uma Franquia',
+  interestState: '',
+  interestCity: ''
+};
+
+export const WHITE_LABEL_INTEREST = 'Quero contratar White-Label (Marca Própria)';
+export const DRIVER_INTEREST = 'Sou Motorista';
+
+interface ContactProps {
+  // Quando informado, o interesse fica fixo e o campo "Interesse Principal" some
+  fixedInterest?: string;
+  // Textos da seção; quando omitidos, usa a versão para investidores
+  title?: string;
+  highlight?: string;
+  intro?: string;
+  benefits?: ContactBenefit[];
+  submitLabel?: string;
+  // Espaçamento vertical da seção
+  spacingClass?: string;
+}
+
+const Contact: React.FC<ContactProps> = ({
+  fixedInterest,
+  title = 'Pronto para transformar a mobilidade na',
+  highlight = 'sua cidade?',
+  intro = 'Preencha o formulário e um de nossos consultores especializados entrará em contato para apresentar a solução ideal para o seu perfil de investimento.',
+  benefits = defaultBenefits,
+  submitLabel = 'Solicitar Consultoria Personalizada',
+  spacingClass = 'py-28',
+}) => {
   const [loadingCep, setLoadingCep] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    whatsapp: '',
-    cep: '',
-    address: '',
-    number: '',
-    neighborhood: '',
-    city: '',
-    state: '',
-    interest: 'Quero abrir uma Franquia'
-  });
+
+  const startForm = { ...initialForm, interest: fixedInterest ?? initialForm.interest };
+  const [formData, setFormData] = useState(startForm);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -65,235 +106,233 @@ const Contact: React.FC = () => {
 
   const handleReset = () => {
     setIsSuccess(false);
-    setFormData({
-      name: '',
-      email: '',
-      whatsapp: '',
-      cep: '',
-      address: '',
-      number: '',
-      neighborhood: '',
-      city: '',
-      state: '',
-      interest: 'Quero abrir uma Franquia'
-    });
+    setFormData(startForm);
   };
 
-  return (
-    <section id="contact" className="py-24 bg-tec-dark relative">
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-tec-primary/5 blur-[150px] pointer-events-none" />
-      
-      <div className="container mx-auto px-6">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 md:p-16 flex flex-col lg:flex-row gap-16 shadow-2xl relative z-10 overflow-hidden min-h-[600px]">
-          
-          {/* Decorative bar */}
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-tec-primary to-blue-600" />
+  const inputClass = 'w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 hover:border-white/20 focus:bg-white/[0.06] focus:border-tec-primary focus:ring-4 focus:ring-tec-primary/15 outline-none transition-all duration-200';
+  const labelClass = 'block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2';
 
-          {/* Text */}
-          <div className="lg:w-1/2">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6">
-              Pronto para transformar a mobilidade na sua cidade?
-            </h2>
-            <p className="text-gray-400 text-lg mb-8">
-              Preencha o formulário e um de nossos consultores especializados entrará em contato para apresentar a solução ideal para o seu perfil de investimento.
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 text-gray-300">
-                <div className="w-2 h-2 rounded-full bg-tec-primary" />
-                <span>Consultoria gratuita e personalizada</span>
+  return (
+    <section id="contact" className={`${spacingClass} bg-tec-dark relative overflow-hidden scroll-mt-20`}>
+      {/* Fundo: grade sutil e brilhos */}
+      <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-tec-primary/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 -right-32 w-96 h-96 bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        <SectionHeader
+          title={title}
+          highlight={highlight}
+        />
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="relative max-w-6xl mx-auto p-px rounded-3xl bg-gradient-to-br from-tec-primary/70 via-violet-500/40 to-emerald-400/50 shadow-[0_30px_80px_-20px_rgba(30,167,225,0.35)]"
+        >
+          <div className="relative rounded-3xl bg-zinc-950/95 backdrop-blur-xl overflow-hidden flex flex-col lg:flex-row">
+            {/* Faixa de luz no topo */}
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-tec-primary to-transparent" />
+
+            {/* Coluna de texto */}
+            <div className="relative lg:w-5/12 p-8 md:p-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/10 overflow-hidden">
+              <div className="absolute -top-24 -left-24 w-72 h-72 bg-tec-primary/20 rounded-full blur-3xl pointer-events-none" />
+
+              <p className="relative text-gray-300 text-lg leading-relaxed mb-10">
+                {intro}
+              </p>
+
+              <div className="relative space-y-4">
+                {benefits.map((b, i) => (
+                  <motion.div
+                    key={b.text}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                    className="group flex items-center gap-4 p-4 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/15 transition-all duration-300"
+                  >
+                    <div className={`w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br ${b.gradient} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <b.icon size={18} />
+                    </div>
+                    <span className="text-gray-200 font-medium">{b.text}</span>
+                  </motion.div>
+                ))}
               </div>
-              <div className="flex items-center gap-4 text-gray-300">
-                <div className="w-2 h-2 rounded-full bg-tec-primary" />
-                <span>Demonstração do painel administrativo</span>
-              </div>
-              <div className="flex items-center gap-4 text-gray-300">
-                <div className="w-2 h-2 rounded-full bg-tec-primary" />
-                <span>Planilha de viabilidade econômica</span>
+
+              <div className="relative mt-12 pt-6 border-t border-white/10 flex items-center gap-3 text-sm text-gray-400">
+                <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+                Seus dados estão seguros. Respeitamos a LGPD.
               </div>
             </div>
-          </div>
 
-          {/* Form Area */}
-          <div className="lg:w-1/2 bg-black/40 p-8 rounded-2xl backdrop-blur-sm border border-white/5 flex flex-col justify-center">
-            {isSuccess ? (
-              <div className="text-center flex flex-col items-center animate-in fade-in zoom-in duration-500 py-10">
-                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-                  <CheckCircle className="w-10 h-10 text-green-500" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Solicitação Recebida!</h3>
-                <p className="text-gray-400 mb-8 max-w-xs">
-                  Obrigado, <span className="text-tec-primary font-bold">{formData.name}</span>.
-                  <br className="mb-2"/>
-                  Nossa equipe de expansão recebeu seus dados e entrará em contato via WhatsApp em breve.
-                </p>
-                <Button onClick={handleReset} variant="outline" className="w-full">
-                  Enviar nova mensagem
-                </Button>
-              </div>
-            ) : (
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                
-                {/* Nome e Email */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Nome Completo</label>
-                    <input 
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      type="text" 
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                      placeholder="Seu nome"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">E-mail</label>
-                    <input 
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      type="email" 
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                      placeholder="seu@email.com"
-                    />
-                  </div>
-                </div>
-
-                {/* Whatsapp e CEP */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">WhatsApp</label>
-                    <input 
-                      name="whatsapp"
-                      required
-                      value={formData.whatsapp}
-                      onChange={handleChange}
-                      type="tel" 
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                      placeholder="(00) 00000-0000"
-                    />
-                  </div>
-                  <div className="relative">
-                    <label className="block text-sm font-medium text-gray-400 mb-2 flex justify-between">
-                      CEP 
-                      {loadingCep && <span className="text-tec-primary text-xs flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Buscando...</span>}
-                    </label>
-                    <div className="relative">
-                      <input 
-                        name="cep"
-                        value={formData.cep}
-                        onChange={handleChange}
-                        onBlur={handleCepBlur}
-                        type="text" 
-                        maxLength={9}
-                        className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all pr-10"
-                        placeholder="00000-000"
-                      />
-                      <div className="absolute right-3 top-3 text-gray-500">
-                        <Search size={18} />
-                      </div>
+            {/* Formulário */}
+            <div className="relative lg:w-7/12 p-8 md:p-12">
+              {isSuccess ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="h-full text-center flex flex-col items-center justify-center py-10"
+                >
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 bg-emerald-500/40 rounded-full blur-2xl animate-pulse" />
+                    <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg">
+                      <CheckCircle className="w-10 h-10 text-white" />
                     </div>
                   </div>
-                </div>
+                  <h3 className="text-2xl font-bold text-white mb-3">Solicitação Recebida!</h3>
+                  <p className="text-gray-400 mb-8 max-w-sm leading-relaxed">
+                    Obrigado, <span className="text-tec-primary font-bold">{formData.name}</span>.
+                    <br />
+                    Nossa equipe de expansão recebeu seus dados sobre{' '}
+                    <span className="text-white font-semibold">{formData.interestCity} - {formData.interestState}</span>{' '}
+                    e entrará em contato via WhatsApp em breve.
+                  </p>
+                  <Button onClick={handleReset} variant="outline" className="w-full max-w-xs">
+                    Enviar nova mensagem
+                  </Button>
+                </motion.div>
+              ) : (
+                <form className="space-y-8" onSubmit={handleSubmit}>
 
-                {/* Endereço e Número */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Endereço</label>
-                    <input 
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      type="text" 
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                      placeholder="Rua, Av..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Número</label>
-                    <input 
-                      name="number"
-                      value={formData.number}
-                      onChange={handleChange}
-                      type="text" 
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                      placeholder="123"
-                    />
-                  </div>
-                </div>
+                  {/* 1. Dados pessoais */}
+                  <fieldset className="space-y-4">
+                    <StepTitle number={1} icon={User} title="Seus dados" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className={labelClass}>Nome Completo</label>
+                        <input name="name" required value={formData.name} onChange={handleChange} type="text" className={inputClass} placeholder="Seu nome" />
+                      </div>
+                      <div>
+                        <label className={labelClass}>E-mail</label>
+                        <input name="email" required value={formData.email} onChange={handleChange} type="email" className={inputClass} placeholder="seu@email.com" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelClass}>WhatsApp</label>
+                      <input name="whatsapp" required value={formData.whatsapp} onChange={handleChange} type="tel" className={inputClass} placeholder="(00) 00000-0000" />
+                    </div>
+                  </fieldset>
 
-                {/* Bairro, Cidade, Estado */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Bairro</label>
-                    <input 
-                      name="neighborhood"
-                      value={formData.neighborhood}
-                      onChange={handleChange}
-                      type="text" 
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Cidade</label>
-                    <input 
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      type="text" 
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Estado</label>
-                    <input 
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      type="text" 
-                      maxLength={2}
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all uppercase"
-                      placeholder="UF"
-                    />
-                  </div>
-                </div>
+                  {/* 2. Endereço */}
+                  <fieldset className="space-y-4">
+                    <StepTitle number={2} icon={Home} title="Seu endereço" />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className={`${labelClass} flex justify-between`}>
+                          CEP
+                          {loadingCep && <span className="text-tec-primary normal-case tracking-normal flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Buscando...</span>}
+                        </label>
+                        <div className="relative">
+                          <input name="cep" value={formData.cep} onChange={handleChange} onBlur={handleCepBlur} type="text" maxLength={9} className={`${inputClass} pr-10`} placeholder="00000-000" />
+                          <Search size={18} className="absolute right-3 top-3.5 text-gray-500" />
+                        </div>
+                      </div>
+                      <div className="md:col-span-2 grid grid-cols-3 gap-4">
+                        <div className="col-span-2">
+                          <label className={labelClass}>Endereço</label>
+                          <input name="address" value={formData.address} onChange={handleChange} type="text" className={inputClass} placeholder="Rua, Av..." />
+                        </div>
+                        <div>
+                          <label className={labelClass}>Número</label>
+                          <input name="number" value={formData.number} onChange={handleChange} type="text" className={inputClass} placeholder="123" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className={labelClass}>Bairro</label>
+                        <input name="neighborhood" value={formData.neighborhood} onChange={handleChange} type="text" className={inputClass} />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Cidade</label>
+                        <input name="city" value={formData.city} onChange={handleChange} type="text" className={inputClass} />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Estado</label>
+                        <input name="state" value={formData.state} onChange={handleChange} type="text" maxLength={2} className={`${inputClass} uppercase`} placeholder="UF" />
+                      </div>
+                    </div>
+                  </fieldset>
 
-                {/* Interesse */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Interesse Principal</label>
-                  <select 
-                    name="interest"
-                    value={formData.interest}
-                    onChange={handleChange}
-                    className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white focus:border-tec-primary focus:ring-1 focus:ring-tec-primary outline-none transition-all"
-                  >
-                    <option>Quero abrir uma Franquia</option>
-                    <option>Quero contratar White-Label (Marca Própria)</option>
-                    <option>Sou Motorista</option>
-                    <option>Outros assuntos</option>
-                  </select>
-                </div>
+                  {/* 3. Interesse */}
+                  <fieldset className="space-y-4">
+                    <StepTitle number={3} icon={Target} title="Seu interesse" />
+                    {!fixedInterest && (
+                      <div>
+                        <label className={labelClass}>Interesse Principal</label>
+                        <select name="interest" value={formData.interest} onChange={handleChange} className={`${inputClass} [&>option]:bg-zinc-900`}>
+                          <option>Quero abrir uma Franquia</option>
+                          <option>{WHITE_LABEL_INTEREST}</option>
+                          <option>{DRIVER_INTEREST}</option>
+                          <option>Outros assuntos</option>
+                        </select>
+                      </div>
+                    )}
 
-                <Button type="submit" variant="primary" className="w-full mt-4" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <><Loader2 className="w-4 h-4 animate-spin" /> Enviando...</>
-                  ) : (
-                    <><MessageSquare className="w-4 h-4" /> Receber Atendimento</>
-                  )}
-                </Button>
-                <p className="text-xs text-center text-gray-500 mt-4">
-                  Seus dados estão seguros. Respeitamos a LGPD.
-                </p>
-              </form>
-            )}
+                    {formData.interest === DRIVER_INTEREST && (
+                      <div className="flex items-start gap-3 p-4 rounded-xl border border-emerald-400/30 bg-emerald-400/[0.06] text-sm text-gray-300 leading-relaxed">
+                        <Smartphone className="w-5 h-5 shrink-0 mt-0.5 text-emerald-400" />
+                        <span>
+                          O cadastro de motoristas é feito pelo App Motorista, onde você também vê os planos da sua cidade.{' '}
+                          <Link to="/motorista" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
+                            Ver como começar
+                          </Link>
+                        </span>
+                      </div>
+                    )}
+
+                    <InterestCityField
+                      state={formData.interestState}
+                      city={formData.interestCity}
+                      onChange={(interestState, interestCity) => setFormData(prev => ({ ...prev, interestState, interestCity }))}
+                      ownCity={formData.city}
+                      ownState={formData.state}
+                      inputClass={inputClass}
+                      labelClass={labelClass}
+                    />
+                  </fieldset>
+
+                  <div className="flex justify-center pt-2">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="group relative overflow-hidden rounded-full bg-gradient-to-r from-tec-primary via-cyan-500 to-violet-500 px-7 py-3 text-sm text-white font-semibold tracking-wide shadow-[0_10px_30px_-10px_rgba(30,167,225,0.8)] hover:shadow-[0_15px_40px_-10px_rgba(139,92,246,0.8)] hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:hover:translate-y-0"
+                    >
+                      {/* Reflexo que atravessa o botão */}
+                      <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-12" />
+                      <span className="relative flex items-center justify-center gap-2">
+                        {isSubmitting ? (
+                          <><Loader2 className="w-4 h-4 animate-spin" /> Enviando solicitação...</>
+                        ) : (
+                          <><Sparkles className="w-4 h-4" /> {submitLabel} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></>
+                        )}
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
-
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
+
+// Título numerado de cada etapa do formulário
+const StepTitle: React.FC<{ number: number; icon: React.ElementType; title: string }> = ({ number, icon: Icon, title }) => (
+  <legend className="flex items-center gap-3 mb-1 w-full">
+    <span className="w-7 h-7 rounded-full bg-gradient-to-br from-tec-primary to-violet-500 flex items-center justify-center text-white text-xs font-bold shadow-lg">
+      {number}
+    </span>
+    <Icon className="w-4 h-4 text-tec-primary" />
+    <span className="text-white font-semibold">{title}</span>
+    <span className="flex-1 h-px bg-gradient-to-r from-white/15 to-transparent" />
+  </legend>
+);
 
 export default Contact;
