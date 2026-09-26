@@ -44,12 +44,12 @@ const Header: React.FC = () => {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {navItems.map((item) => (
             <Link 
               key={item.label}
               to={item.href}
-              className={`font-medium transition-colors text-sm uppercase tracking-wider ${
+              className={`whitespace-nowrap font-medium transition-colors text-sm uppercase tracking-wider ${
                 location.pathname === item.href 
                   ? 'text-tec-primary' 
                   : 'text-gray-300 hover:text-tec-primary'
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
         </nav>
 
         {/* CTA */}
-        <div className="hidden md:block">
+        <div className="hidden xl:block">
           <Button variant="primary" size="sm" className="bg-tec-primary text-white">
             <User className="w-4 h-4" />
             Área do Cliente
@@ -70,7 +70,7 @@ const Header: React.FC = () => {
 
         {/* Mobile Toggle */}
         <button 
-          className="md:hidden text-white"
+          className="lg:hidden text-white"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X /> : <Menu />}
@@ -79,7 +79,7 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-zinc-900 border-t border-zinc-800 py-6 px-6 flex flex-col gap-4 shadow-2xl">
+        <div className="lg:hidden absolute top-full left-0 w-full bg-zinc-900 border-t border-zinc-800 py-6 px-6 flex flex-col gap-4 shadow-2xl">
           {navItems.map((item) => (
             <Link 
               key={item.label}
