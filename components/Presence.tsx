@@ -93,7 +93,7 @@ const Presence: React.FC = () => {
           subtitle="Estamos pintando o mapa do Brasil de azul. Veja onde a TechDriver já é realidade e onde estaremos em breve."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {columns.map((col, i) => (
             <motion.div
               key={col.title}
