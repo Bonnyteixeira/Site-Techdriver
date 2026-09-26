@@ -1,5 +1,7 @@
 # TechDriver — Site Institucional
 
+![Preview do site TechDriver no desktop e no celular](docs/techdriver-preview.jpg)
+
 Site institucional da **TechDriver**, plataforma de mobilidade urbana com modelo de franquia e opção white label.
 
 ## Tecnologias
