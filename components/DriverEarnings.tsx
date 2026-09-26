@@ -18,7 +18,7 @@ const rides = [
 
 // Tela ilustrativa da carteira do App Motorista
 const WalletMockup: React.FC = () => (
-  <div className="relative w-[300px] h-[620px] rounded-[48px] p-2.5 bg-[#1A1D24] border border-white/15 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)]">
+  <div className="relative w-[300px] max-w-full h-[620px] rounded-[48px] p-2.5 bg-[#1A1D24] border border-white/15 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)]">
     <div className="w-full h-full rounded-[40px] bg-[#0E1015] overflow-hidden flex flex-col">
       <div className="h-[34px] flex justify-center items-center">
         <div className="w-[92px] h-6 rounded-full bg-black" />
@@ -123,8 +123,8 @@ const DriverEarnings: React.FC = () => {
               transition={{ type: 'spring', stiffness: 200, damping: 18 }}
             >
               <WalletMockup />
-              <FloatingCard icon={Zap} box="bg-amber-400/15 text-amber-400" title="Tarifa dinâmica ativa" text="Região central · alta demanda" className="-right-8 lg:-right-28 top-24 animate-[float_6s_ease-in-out_infinite]" />
-              <FloatingCard icon={Check} box="bg-emerald-400/15 text-emerald-400" title="Saque solicitado" text="Acompanhe pelo extrato" className="-left-8 lg:-left-28 bottom-20 animate-[float_6s_ease-in-out_3s_infinite]" />
+              <FloatingCard icon={Zap} box="bg-amber-400/15 text-amber-400" title="Tarifa dinâmica ativa" text="Região central · alta demanda" className="-right-8 xl:-right-28 top-24 animate-[float_6s_ease-in-out_infinite]" />
+              <FloatingCard icon={Check} box="bg-emerald-400/15 text-emerald-400" title="Saque solicitado" text="Acompanhe pelo extrato" className="-left-8 xl:-left-28 bottom-20 animate-[float_6s_ease-in-out_3s_infinite]" />
             </motion.div>
             <p className="relative mt-5 text-xs text-gray-500">Tela ilustrativa do App Motorista</p>
           </motion.div>
