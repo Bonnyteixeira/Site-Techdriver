@@ -37,12 +37,12 @@ const DriverAppFeatures: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.05 }}
               onMouseMove={onMove}
-              className="group isolate relative overflow-hidden p-5 md:p-8 bg-tec-dark flex flex-col gap-3 md:gap-3.5"
+              className="group isolate relative overflow-hidden p-4 sm:p-5 md:p-8 bg-tec-dark flex flex-col gap-3 md:gap-3.5"
             >
               <Spotlight color={f.spot} size={260} />
               <span className={`absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full bg-gradient-to-r ${f.bar} to-transparent transition-all duration-500`} />
               <f.icon className={`w-[22px] h-[22px] md:w-[26px] md:h-[26px] ${f.color} group-hover:scale-125 group-hover:-translate-y-0.5 transition-transform duration-300`} strokeWidth={1.75} />
-              <h3 className="text-[15px] md:text-[17px] font-semibold text-white">{f.title}</h3>
+              <h3 className="text-sm sm:text-[15px] md:text-[17px] font-semibold text-white">{f.title}</h3>
               <p className="text-[13px] md:text-sm leading-relaxed text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{f.desc}</p>
             </motion.div>
           ))}
