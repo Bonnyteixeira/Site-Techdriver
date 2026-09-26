@@ -183,20 +183,20 @@ const System: React.FC = () => {
         <div className="container mx-auto px-6">
            <h2 className="text-3xl font-bold text-white text-center mb-12">Especificações de Infraestrutura</h2>
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl text-center">
-                 <div className="text-tec-primary font-mono text-3xl font-bold mb-2">AWS</div>
+              <div className="bg-zinc-900/50 border border-zinc-800 p-4 sm:p-6 rounded-xl text-center">
+                 <div className="text-tec-primary font-mono text-xl sm:text-2xl lg:text-3xl font-bold mb-2">AWS</div>
                  <p className="text-gray-500 text-sm">Cloud Computing</p>
               </div>
-              <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl text-center">
-                 <div className="text-tec-primary font-mono text-3xl font-bold mb-2">Node.js</div>
+              <div className="bg-zinc-900/50 border border-zinc-800 p-4 sm:p-6 rounded-xl text-center">
+                 <div className="text-tec-primary font-mono text-xl sm:text-2xl lg:text-3xl font-bold mb-2">Node.js</div>
                  <p className="text-gray-500 text-sm">Backend Scalable</p>
               </div>
-              <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl text-center">
-                 <div className="text-tec-primary font-mono text-3xl font-bold mb-2">React</div>
+              <div className="bg-zinc-900/50 border border-zinc-800 p-4 sm:p-6 rounded-xl text-center">
+                 <div className="text-tec-primary font-mono text-xl sm:text-2xl lg:text-3xl font-bold mb-2">React</div>
                  <p className="text-gray-500 text-sm">Frontend Web</p>
               </div>
-              <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl text-center">
-                 <div className="text-tec-primary font-mono text-3xl font-bold mb-2">Flutter</div>
+              <div className="bg-zinc-900/50 border border-zinc-800 p-4 sm:p-6 rounded-xl text-center">
+                 <div className="text-tec-primary font-mono text-xl sm:text-2xl lg:text-3xl font-bold mb-2">Flutter</div>
                  <p className="text-gray-500 text-sm">Apps Híbridos</p>
               </div>
            </div>
